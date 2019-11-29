@@ -1,0 +1,48 @@
+{
+  "name": "@iyuo/context",
+  "version": "1.0.0",
+  "description": "The TypeScript expandable library “context” for context processing plugins",
+  "author": "lopatnov",
+  "license": "Apache-2.0",
+  "homepage": "https://iyuo.github.io/context/",
+  "umdName": "iyuo",
+  "source": "src/context.ts",
+  "main": "dist/context.js",
+  "main_min": "dist/context.min.js",
+  "module": "dist/context.es.js",
+  "types": "dist/context.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iyuo/context.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iyuo/context/issues"
+  },
+  "keywords": [
+    "context",
+    "typescript"
+  ],
+  "scripts": {
+    "build": "rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "watch": "rollup -c rollup.config.ts -w",
+    "test": "jest"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "@types/node": "^12.11.7",
+    "jest": "^24.9.0",
+    "jest-config": "^24.9.0",
+    "rollup": "^1.25.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.25.2",
+    "rollup-plugin-uglify": "^6.0.3",
+    "ts-jest": "^24.2.0",
+    "typedoc": "^0.15.0",
+    "typescript": "^3.6.4"
+  }
+}
