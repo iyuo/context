@@ -61,7 +61,7 @@ export interface IScope<TContext, TResult> {
 }
 
 /**
- * The TypeScript ecosystem for an object. It allows add processing plugins to it.
+ * The TypeScript ecosystem for an object. It allows to add processing plugins to it.
  */
 export class Context<TContext> {
   private _context: TContext;

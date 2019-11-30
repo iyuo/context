@@ -1,7 +1,7 @@
 {
   "name": "@iyuo/context",
   "version": "1.0.0",
-  "description": "The TypeScript expandable library “context” for context processing plugins",
+  "description": "The TypeScript ecosystem for an object. It allows to add processing plugins to it.",
   "author": "lopatnov",
   "license": "Apache-2.0",
   "homepage": "https://iyuo.github.io/context/",
