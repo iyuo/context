@@ -2389,7 +2389,47 @@ img {
 			<a href="#context" id="context" style="color: inherit; text-decoration: none;">
 				<h1>context</h1>
 			</a>
-			<p>The TypeScript expandable library “context” for context processing plugins</p>
+			<p><a href="https://www.npmjs.com/package/@iyuo/context"><img src="https://badge.fury.io/js/%40iyuo%2Fcontext.svg" alt="NPM version"></a>
+				<a href="https://github.com/iyuo/context/blob/master/LICENSE"><img src="https://img.shields.io/github/license/iyuo/context" alt="License"></a>
+			<a href="https://twitter.com/intent/tweet?text=Wow:&amp;url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fcontext"><img src="https://img.shields.io/twitter/url?url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fcontext" alt="Twitter"></a></p>
+			<p>The TypeScript ecosystem for an object. It allows to add processing plugins to it.</p>
+			<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+				<h1>Install</h1>
+			</a>
+			<p>Node:</p>
+			<p><a href="https://www.npmjs.com/package/@iyuo/context"><img src="https://nodei.co/npm/@iyuo/context.png?downloads=true&downloadRank=true&stars=true" alt="https://nodei.co/npm/@iyuo/context.png?downloads=true&amp;downloadRank=true&amp;stars=true"></a></p>
+			<pre><code class="language-shell">npm install @iyuo/context</code></pre>
+			<p><a href="//iyuo.github.io/context/dist/context.js">Browser</a></p>
+			<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"//iyuo.github.io/context/dist/context.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+			<a href="#import-package-to-the-project" id="import-package-to-the-project" style="color: inherit; text-decoration: none;">
+				<h2>Import package to the project</h2>
+			</a>
+			<p>TypeScript:</p>
+			<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { Context } <span class="hljs-keyword">from</span> <span class="hljs-string">"@iyuo/context"</span>;</code></pre>
+			<p>or JavaScript:</p>
+			<pre><code class="language-javascript"><span class="hljs-keyword">var</span> iyuo = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@iyuo/context"</span>);
+<span class="hljs-keyword">var</span> Context = iyuo.Context;</code></pre>
+			<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+				<h1>Documentation</h1>
+			</a>
+			<p>Link: <a href="https://iyuo.github.io/context/docs/index.html">https://iyuo.github.io/context/docs/index.html</a></p>
+			<a href="#sample" id="sample" style="color: inherit; text-decoration: none;">
+				<h1>Sample</h1>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params"><span class="hljs-keyword">this</span>: <span class="hljs-built_in">number</span>[]</span>): <span class="hljs-title">number</span> </span>{
+   <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.reduce((previousValue: <span class="hljs-built_in">number</span>, currentValue: <span class="hljs-built_in">number</span>): <span class="hljs-function"><span class="hljs-params">number</span> =&gt;</span> {
+     <span class="hljs-keyword">return</span> previousValue + currentValue;
+   }, <span class="hljs-number">0</span>);
+}
+
+<span class="hljs-keyword">var</span> numbers = <span class="hljs-keyword">new</span> Context([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]);
+<span class="hljs-keyword">var</span> takeSum = numbers.make(sum);
+<span class="hljs-built_in">console</span>.log(takeSum); <span class="hljs-comment">// 15</span></code></pre>
+			<a href="#rights-and-agreements" id="rights-and-agreements" style="color: inherit; text-decoration: none;">
+				<h1>Rights and Agreements</h1>
+			</a>
+			<p>License <a href="https://github.com/iyuo/context/blob/master/LICENSE">Apache-2.0</a></p>
+			<p>Copyright 2019 Oleksandr iyuo</p>
 		</div>
 		<section class="tsd-panel-group tsd-index-group">
 			<h2>Index</h2>

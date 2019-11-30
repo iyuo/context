@@ -5,7 +5,7 @@
 }(this, (function (exports) { 'use strict';
 
   /**
-   * The TypeScript ecosystem for an object. It allows add processing plugins to it.
+   * The TypeScript ecosystem for an object. It allows to add processing plugins to it.
    */
   var Context = /** @class */ (function () {
       /**
@@ -107,7 +107,7 @@
        * ```
        * @returns The context ecosystem
        */
-      Context.prototype.task = function () {
+      Context.prototype.tasks = function () {
           var plugins = [];
           for (var _i = 0; _i < arguments.length; _i++) {
               plugins[_i] = arguments[_i];
@@ -116,6 +116,25 @@
               var plugin = plugins[i];
               plugin.apply(this._context, this._use);
           }
+          this._use = [];
+          return this;
+      };
+      /**
+       * Execute plugin with params
+       * @param plugin Processing plugin
+       * ```
+       * (this: TContext, ...use: any[]) => void
+       * ```
+       * @param use Arguments of a plugin
+       * @returns The context ecosystem
+       */
+      Context.prototype.task = function (plugin) {
+          var use = [];
+          for (var _i = 1; _i < arguments.length; _i++) {
+              use[_i - 1] = arguments[_i];
+          }
+          var args = use.length === 0 ? this._use : use;
+          plugin.apply(this._context, args);
           return this;
       };
       /**
@@ -127,7 +146,14 @@
        * @returns The result of plugin processing
        */
       Context.prototype.make = function (plugin) {
-          return plugin.apply(this._context, this._use);
+          var use = [];
+          for (var _i = 1; _i < arguments.length; _i++) {
+              use[_i - 1] = arguments[_i];
+          }
+          var args = use.length === 0 ? this._use : use;
+          var result = plugin.apply(this._context, args);
+          this._use = [];
+          return result;
       };
       /**
        * Execute plugin and make new context, based on the plugin result
@@ -135,10 +161,18 @@
        * ```
        * (this: TContext, ...use: any[]) => TResult
        * ```
+       * @param use arguments of a plugin
        * @returns New context, based on plugin result.
        */
       Context.prototype.map = function (plugin) {
-          return new Context(plugin.apply(this._context, this._use));
+          var use = [];
+          for (var _i = 1; _i < arguments.length; _i++) {
+              use[_i - 1] = arguments[_i];
+          }
+          var args = use.length === 0 ? this._use : use;
+          var result = new Context(plugin.apply(this._context, args));
+          this._use = [];
+          return result;
       };
       /**
        * Execute IScope processing plugin
@@ -149,7 +183,14 @@
        * @returns The result of the processing
        */
       Context.prototype.scope = function (plugin) {
-          return plugin.call(this, this._context, this._use);
+          var use = [];
+          for (var _i = 1; _i < arguments.length; _i++) {
+              use[_i - 1] = arguments[_i];
+          }
+          var args = use.length === 0 ? this._use : use;
+          var result = plugin.call(this, this._context, this._use);
+          this._use = [];
+          return result;
       };
       return Context;
   }());

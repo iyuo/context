@@ -59,7 +59,7 @@ export interface IScope<TContext, TResult> {
     (this: Context<TContext>, context: TContext, use: any[]): TResult;
 }
 /**
- * The TypeScript ecosystem for an object. It allows add processing plugins to it.
+ * The TypeScript ecosystem for an object. It allows to add processing plugins to it.
  */
 export declare class Context<TContext> {
     private _context;
@@ -139,7 +139,17 @@ export declare class Context<TContext> {
      * ```
      * @returns The context ecosystem
      */
-    task(...plugins: IPlugin<TContext, void>[]): Context<TContext>;
+    tasks(...plugins: IPlugin<TContext, void>[]): Context<TContext>;
+    /**
+     * Execute plugin with params
+     * @param plugin Processing plugin
+     * ```
+     * (this: TContext, ...use: any[]) => void
+     * ```
+     * @param use Arguments of a plugin
+     * @returns The context ecosystem
+     */
+    task(plugin: IPlugin<TContext, void>, ...use: any[]): Context<TContext>;
     /**
      * Execute plugin function and return the result of plugin processing
      * @param plugin Processing plugin
@@ -148,16 +158,17 @@ export declare class Context<TContext> {
      * ```
      * @returns The result of plugin processing
      */
-    make<TResult>(plugin: IPlugin<TContext, TResult>): TResult;
+    make<TResult>(plugin: IPlugin<TContext, TResult>, ...use: any[]): TResult;
     /**
      * Execute plugin and make new context, based on the plugin result
      * @param plugin Processing plugin
      * ```
      * (this: TContext, ...use: any[]) => TResult
      * ```
+     * @param use arguments of a plugin
      * @returns New context, based on plugin result.
      */
-    map<TMappedContext>(plugin: IPlugin<TContext, TMappedContext>): Context<TMappedContext>;
+    map<TMappedContext>(plugin: IPlugin<TContext, TMappedContext>, ...use: any[]): Context<TMappedContext>;
     /**
      * Execute IScope processing plugin
      * @param plugin Processing plugin
@@ -166,5 +177,5 @@ export declare class Context<TContext> {
      * ```
      * @returns The result of the processing
      */
-    scope<TResult>(plugin: IScope<TContext, TResult>): TResult;
+    scope<TResult>(plugin: IScope<TContext, TResult>, ...use: any[]): TResult;
 }
