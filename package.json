@@ -1,6 +1,6 @@
 {
   "name": "@iyuo/context",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The TypeScript ecosystem for an object. It allows to add processing plugins to it.",
   "author": "lopatnov",
   "license": "Apache-2.0",

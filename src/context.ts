@@ -169,11 +169,30 @@ export class Context<TContext> {
    * ```
    * @returns The context ecosystem
    */
-  public task(...plugins: IPlugin<TContext, void>[]): Context<TContext> {
+  public tasks(...plugins: IPlugin<TContext, void>[]): Context<TContext> {
     for (let i = 0; i < plugins.length; i++) {
       let plugin = plugins[i];
       plugin.apply(this._context, this._use);
     }
+    this._use = [];
+    return this;
+  }
+
+  /**
+   * Execute plugin with params
+   * @param plugin Processing plugin
+   * ```
+   * (this: TContext, ...use: any[]) => void
+   * ```
+   * @param use Arguments of a plugin
+   * @returns The context ecosystem
+   */
+  public task(
+    plugin: IPlugin<TContext, void>,
+    ...use: any[]
+  ): Context<TContext> {
+    let args = use.length === 0 ? this._use : use;
+    plugin.apply(this._context, args);
     return this;
   }
 
@@ -185,8 +204,14 @@ export class Context<TContext> {
    * ```
    * @returns The result of plugin processing
    */
-  public make<TResult>(plugin: IPlugin<TContext, TResult>): TResult {
-    return plugin.apply(this._context, this._use);
+  public make<TResult>(
+    plugin: IPlugin<TContext, TResult>,
+    ...use: any[]
+  ): TResult {
+    let args = use.length === 0 ? this._use : use;
+    let result = plugin.apply(this._context, args);
+    this._use = [];
+    return result;
   }
 
   /**
@@ -195,12 +220,17 @@ export class Context<TContext> {
    * ```
    * (this: TContext, ...use: any[]) => TResult
    * ```
+   * @param use arguments of a plugin
    * @returns New context, based on plugin result.
    */
   public map<TMappedContext>(
-    plugin: IPlugin<TContext, TMappedContext>
+    plugin: IPlugin<TContext, TMappedContext>,
+    ...use: any[]
   ): Context<TMappedContext> {
-    return new Context(plugin.apply(this._context, this._use));
+    let args = use.length === 0 ? this._use : use;
+    let result = new Context(plugin.apply(this._context, args));
+    this._use = [];
+    return result;
   }
 
   /**
@@ -211,7 +241,13 @@ export class Context<TContext> {
    * ```
    * @returns The result of the processing
    */
-  public scope<TResult>(plugin: IScope<TContext, TResult>): TResult {
-    return plugin.call(this, this._context, this._use);
+  public scope<TResult>(
+    plugin: IScope<TContext, TResult>,
+    ...use: any[]
+  ): TResult {
+    let args = use.length === 0 ? this._use : use;
+    let result = plugin.call(this, this._context, this._use);
+    this._use = [];
+    return result;
   }
 }
