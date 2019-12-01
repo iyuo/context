@@ -5,6 +5,28 @@
 }(this, (function (exports) { 'use strict';
 
   /**
+   * Converts a function to a context ecosystem plugin.
+   * Sample
+   * ```
+   * let namespacePlugin = pluginize(namespace);
+   * let obj = {};
+   * let ns = new Context(obj).map(namespacePlugin("my.own.ns"));
+   * console.log(obj);
+   * ```
+   * @param plugin Processing plugin
+   */
+  function pluginize(plugin) {
+      return function () {
+          var args = [];
+          for (var _i = 0; _i < arguments.length; _i++) {
+              args[_i] = arguments[_i];
+          }
+          return function () {
+              return plugin.apply(this, args);
+          };
+      };
+  }
+  /**
    * The TypeScript ecosystem for an object. It allows to add processing plugins to it.
    */
   var Context = /** @class */ (function () {
@@ -196,6 +218,7 @@
   }());
 
   exports.Context = Context;
+  exports.pluginize = pluginize;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
