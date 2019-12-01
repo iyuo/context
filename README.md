@@ -55,6 +55,10 @@ var takeSum = numbers.make(sum);
 console.log(takeSum); // 15
 ```
 
+# Plugins
+
+- [namespace](https://iyuo.github.io/namespace/)
+
 # Rights and Agreements
 
 License [Apache-2.0](https://github.com/iyuo/context/blob/master/LICENSE)
