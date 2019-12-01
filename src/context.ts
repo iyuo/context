@@ -61,6 +61,27 @@ export interface IScope<TContext, TResult> {
 }
 
 /**
+ * Converts a function to a context ecosystem plugin.
+ * Sample
+ * ```
+ * let namespacePlugin = pluginize(namespace);
+ * let obj = {};
+ * let ns = new Context(obj).map(namespacePlugin("my.own.ns"));
+ * console.log(obj);
+ * ```
+ * @param plugin Processing plugin
+ */
+export function pluginize<TContext, TResult>(
+  plugin: IPlugin<TContext, TResult>
+) {
+  return function(...args: any[]): IPlugin<TContext, TResult> {
+    return function() {
+      return plugin.apply(this, args);
+    };
+  };
+}
+
+/**
  * The TypeScript ecosystem for an object. It allows to add processing plugins to it.
  */
 export class Context<TContext> {
