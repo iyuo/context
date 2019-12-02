@@ -61,6 +61,32 @@ export interface IScope<TContext, TResult> {
 }
 
 /**
+ * Moves a first argument to a function context. This is conversion from a function to context based function.
+ * @param func Function to convert
+ * @returns A function, which context will be a first argument of a `func` parameter.
+ */
+export function lsh<TContext, TResult>(
+  func: (context: TContext, ...args: any[]) => TResult
+): IPlugin<TContext, TResult> {
+  return function(this: TContext, ...use: any[]): TResult {
+    return func(this, use);
+  };
+}
+
+/**
+ * Moves a function context to a first argument. This is conversion from context based function to a function.
+ * @param plugin A context based function
+ * @returns A function, which a first argument will be a context of a `plugin` parameter
+ */
+export function rsh<TContext, TResult>(
+  plugin: IPlugin<TContext, TResult>
+): (context: TContext, ...args: any[]) => TResult {
+  return function(context: TContext, ...args: any[]): TResult {
+    return plugin.call(context, args);
+  };
+}
+
+/**
  * Converts a function to a context ecosystem plugin.
  * Sample
  * ```

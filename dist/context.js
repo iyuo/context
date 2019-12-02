@@ -5,6 +5,34 @@
 }(this, (function (exports) { 'use strict';
 
   /**
+   * Moves a first argument to a function context. This is conversion from a function to context based function.
+   * @param func Function to convert
+   * @returns A function, which context will be a first argument of a `func` parameter.
+   */
+  function lsh(func) {
+      return function () {
+          var use = [];
+          for (var _i = 0; _i < arguments.length; _i++) {
+              use[_i] = arguments[_i];
+          }
+          return func(this, use);
+      };
+  }
+  /**
+   * Moves a function context to a first argument. This is conversion from context based function to a function.
+   * @param plugin A context based function
+   * @returns A function, which a first argument will be a context of a `plugin` parameter
+   */
+  function rsh(plugin) {
+      return function (context) {
+          var args = [];
+          for (var _i = 1; _i < arguments.length; _i++) {
+              args[_i - 1] = arguments[_i];
+          }
+          return plugin.call(context, args);
+      };
+  }
+  /**
    * Converts a function to a context ecosystem plugin.
    * Sample
    * ```
@@ -218,7 +246,9 @@
   }());
 
   exports.Context = Context;
+  exports.lsh = lsh;
   exports.pluginize = pluginize;
+  exports.rsh = rsh;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
