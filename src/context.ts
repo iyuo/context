@@ -199,7 +199,7 @@ export class Context<TContext> {
   }
 
   /**
-   * Use this arguments of plugins execution
+   * Uses "use" parameter for arguments of plugins execution instead of current Context class property _use.
    * @param use the arguments to use
    * @returns The context ecosystem
    */
@@ -209,7 +209,7 @@ export class Context<TContext> {
   }
 
   /**
-   * Execute plugins functions — a tasks for a context
+   * Execute plugins functions the tasks for a context
    * @param plugins Processing plugins
    * ```
    * (this: TContext, ...use: any[]) => void
@@ -262,7 +262,7 @@ export class Context<TContext> {
   }
 
   /**
-   * Execute plugin and make new context, based on the plugin result
+   * Executes plugin and make new context, based on the plugin result
    * @param plugin Processing plugin
    * ```
    * (this: TContext, ...use: any[]) => TResult
@@ -294,7 +294,6 @@ export class Context<TContext> {
   ): TResult {
     let args = use.length === 0 ? this._use : use;
     let result = plugin.call(this, this._context, this._use);
-    this._use = [];
     return result;
   }
 }

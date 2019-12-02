@@ -141,7 +141,7 @@
           return this;
       };
       /**
-       * Use this arguments of plugins execution
+       * Uses "use" parameter for arguments of plugins execution instead of current Context class property _use.
        * @param use the arguments to use
        * @returns The context ecosystem
        */
@@ -150,7 +150,7 @@
           return this;
       };
       /**
-       * Execute plugins functions — a tasks for a context
+       * Execute plugins functions the tasks for a context
        * @param plugins Processing plugins
        * ```
        * (this: TContext, ...use: any[]) => void
@@ -206,7 +206,7 @@
           return result;
       };
       /**
-       * Execute plugin and make new context, based on the plugin result
+       * Executes plugin and make new context, based on the plugin result
        * @param plugin Processing plugin
        * ```
        * (this: TContext, ...use: any[]) => TResult
@@ -239,7 +239,6 @@
           }
           var args = use.length === 0 ? this._use : use;
           var result = plugin.call(this, this._context, this._use);
-          this._use = [];
           return result;
       };
       return Context;

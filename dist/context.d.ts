@@ -150,13 +150,13 @@ export declare class Context<TContext> {
      */
     use(...args: any[]): Context<TContext>;
     /**
-     * Use this arguments of plugins execution
+     * Uses "use" parameter for arguments of plugins execution instead of current Context class property _use.
      * @param use the arguments to use
      * @returns The context ecosystem
      */
     useArray(use: any[]): Context<TContext>;
     /**
-     * Execute plugins functions — a tasks for a context
+     * Execute plugins functions the tasks for a context
      * @param plugins Processing plugins
      * ```
      * (this: TContext, ...use: any[]) => void
@@ -184,7 +184,7 @@ export declare class Context<TContext> {
      */
     make<TResult>(plugin: IPlugin<TContext, TResult>, ...use: any[]): TResult;
     /**
-     * Execute plugin and make new context, based on the plugin result
+     * Executes plugin and make new context, based on the plugin result
      * @param plugin Processing plugin
      * ```
      * (this: TContext, ...use: any[]) => TResult

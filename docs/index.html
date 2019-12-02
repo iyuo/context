@@ -2414,16 +2414,30 @@ img {
 				<h2>Import package to the project</h2>
 			</a>
 			<p>TypeScript:</p>
-			<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { Context } <span class="hljs-keyword">from</span> <span class="hljs-string">"@iyuo/context"</span>;</code></pre>
+			<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { Context, pluginize, lsh, rsh } <span class="hljs-keyword">from</span> <span class="hljs-string">"@iyuo/context"</span>;</code></pre>
 			<p>or JavaScript:</p>
 			<pre><code class="language-javascript"><span class="hljs-keyword">var</span> iyuo = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@iyuo/context"</span>);
-<span class="hljs-keyword">var</span> Context = iyuo.Context;</code></pre>
+<span class="hljs-keyword">var</span> Context = iyuo.Context;
+<span class="hljs-keyword">var</span> pluginize = iyuo.pluginize;
+<span class="hljs-keyword">var</span> lsh = iyuo.lsh;
+<span class="hljs-keyword">var</span> rsh = iyuo.rsh;</code></pre>
 			<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
 				<h1>Documentation</h1>
 			</a>
 			<p>Link: <a href="https://iyuo.github.io/context/docs/index.html">https://iyuo.github.io/context/docs/index.html</a></p>
-			<a href="#sample" id="sample" style="color: inherit; text-decoration: none;">
-				<h1>Sample</h1>
+			<a href="#demo" id="demo" style="color: inherit; text-decoration: none;">
+				<h1>Demo</h1>
+			</a>
+			<p>See, how it&#39;s working: <a href="https://runkit.com/lopatnov/context-demo">https://runkit.com/lopatnov/context-demo</a></p>
+			<p>Test it with a runkit: <a href="https://npm.runkit.com/@iyuo/context">https://npm.runkit.com/@iyuo/context</a></p>
+			<a href="#plugins" id="plugins" style="color: inherit; text-decoration: none;">
+				<h1>Plugins</h1>
+			</a>
+			<ul>
+				<li><a href="https://iyuo.github.io/namespace/">namespace</a></li>
+			</ul>
+			<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+				<h2>Example</h2>
 			</a>
 			<pre><code class="language-ts"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params"><span class="hljs-keyword">this</span>: <span class="hljs-built_in">number</span>[]</span>): <span class="hljs-title">number</span> </span>{
    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.reduce((previousValue: <span class="hljs-built_in">number</span>, currentValue: <span class="hljs-built_in">number</span>): <span class="hljs-function"><span class="hljs-params">number</span> =&gt;</span> {
@@ -2434,11 +2448,244 @@ img {
 <span class="hljs-keyword">var</span> numbers = <span class="hljs-keyword">new</span> Context([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]);
 <span class="hljs-keyword">var</span> takeSum = numbers.make(sum);
 <span class="hljs-built_in">console</span>.log(takeSum); <span class="hljs-comment">// 15</span></code></pre>
+			<a href="#use-cases" id="use-cases" style="color: inherit; text-decoration: none;">
+				<h1>Use cases</h1>
+			</a>
+			<a href="#class-contexttcontext" id="class-contexttcontext" style="color: inherit; text-decoration: none;">
+				<h2>class Context<TContext></h2>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'A sample of a Context&lt;TContext&gt; class, the object Context&lt;string&gt;'</span>)
+<span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">new</span> Context(<span class="hljs-string">"A sample context"</span>));</code></pre>
+			<a href="#context-tcontext" id="context-tcontext" style="color: inherit; text-decoration: none;">
+				<h3>context(): TContext</h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'context(): TContext'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Gets the context from a wrapper'</span>);
+
+<span class="hljs-keyword">var</span> sys = <span class="hljs-keyword">new</span> Context({ hello: <span class="hljs-string">'world'</span> });
+<span class="hljs-built_in">console</span>.log(sys.context());
+
+<span class="hljs-keyword">var</span> arr = <span class="hljs-keyword">new</span> Context([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+<span class="hljs-built_in">console</span>.log(arr.context());</code></pre>
+			<a href="#changecontext-tcontext-contexttcontext" id="changecontext-tcontext-contexttcontext" style="color: inherit; text-decoration: none;">
+				<h3>change(context: TContext): Context<TContext></h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'change(context: TContext): Context&lt;TContext&gt;'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Change current context to a new one'</span>);
+
+<span class="hljs-keyword">var</span> arr = <span class="hljs-keyword">new</span> Context([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+<span class="hljs-keyword">var</span> changed = arr.change([<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>]);
+<span class="hljs-built_in">console</span>.log( arr === changed ); <span class="hljs-comment">// true</span>
+<span class="hljs-built_in">console</span>.log( arr.context() ); <span class="hljs-comment">// [4,5,6]</span>
+
+<span class="hljs-keyword">var</span> sys = <span class="hljs-keyword">new</span> Context({ hello: <span class="hljs-string">'world'</span> });
+<span class="hljs-built_in">console</span>.log(sys.change({hello: <span class="hljs-string">'friends'</span>}).context()); <span class="hljs-comment">//{hello: "friends"}</span></code></pre>
+			<a href="#useargs-any-contexttcontext" id="useargs-any-contexttcontext" style="color: inherit; text-decoration: none;">
+				<h3>use(...args: any[]): Context<TContext></h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'use(...args: any[]): Context&lt;TContext&gt;'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Add arguments of plugins execution'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dialog</span>(<span class="hljs-params">useQ, useA</span>) </span>{
+   <span class="hljs-keyword">this</span>.q(<span class="hljs-string">`<span class="hljs-subst">${useQ}</span> Hi, how are you doing?`</span>);
+   <span class="hljs-keyword">this</span>.a(<span class="hljs-string">`<span class="hljs-subst">${useA}</span> Fine.`</span>);
+   <span class="hljs-keyword">this</span>.q(<span class="hljs-string">`<span class="hljs-subst">${useA}</span> How's it going?`</span>);
+   <span class="hljs-keyword">this</span>.a(<span class="hljs-string">`<span class="hljs-subst">${useQ}</span> Good`</span>);
+}
+
+<span class="hljs-keyword">var</span> space = <span class="hljs-keyword">new</span> Context({
+   q: <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Q: <span class="hljs-subst">${msg}</span>`</span>) },
+   a: <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`A: <span class="hljs-subst">${msg}</span>`</span>) }
+});
+
+space.use(<span class="hljs-string">'Tom'</span>, <span class="hljs-string">'Lisa'</span>).make(dialog);</code></pre>
+			<a href="#usearrayuse-any-contexttcontext" id="usearrayuse-any-contexttcontext" style="color: inherit; text-decoration: none;">
+				<h3>useArray(use: any[]): Context<TContext></h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'useArray(use: any[]): Context&lt;TContext&gt;'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Uses "use" parameter for arguments of plugins execution instead of current Context class property _use.'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">strategy</span>(<span class="hljs-params">teamA, teamB</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">behavior1, behavior2, behaviorDefault</span>) </span>{
+        <span class="hljs-keyword">switch</span>(<span class="hljs-keyword">this</span>(teamA,teamB)) {
+            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:
+                <span class="hljs-keyword">return</span> behavior1();
+            <span class="hljs-keyword">case</span> <span class="hljs-number">-1</span>:
+                <span class="hljs-keyword">return</span> behavior2();
+            <span class="hljs-keyword">default</span>:
+                <span class="hljs-keyword">return</span> behaviorDefault();
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">strategy1</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'This is strategy1'</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">strategy2</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'This is strategy2'</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">strategy3</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'This is strategy3'</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">3</span>;
+}
+
+<span class="hljs-keyword">var</span> space = <span class="hljs-keyword">new</span> Context(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">compare</span>(<span class="hljs-params">a,b</span>)</span>{
+  <span class="hljs-keyword">var</span> diff = a - b;
+  <span class="hljs-keyword">return</span> diff === <span class="hljs-number">0</span> ? <span class="hljs-number">0</span> : (diff &gt; <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>);
+});
+
+space.useArray([strategy1, strategy2, strategy3]).make(strategy(<span class="hljs-number">3</span>,<span class="hljs-number">4</span>))</code></pre>
+			<a href="#tasksplugins-ipluginlttcontext-voidgt-contexttcontext" id="tasksplugins-ipluginlttcontext-voidgt-contexttcontext" style="color: inherit; text-decoration: none;">
+				<h3>tasks(...plugins: IPlugin&lt;TContext, void&gt;[]): Context<TContext></h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'tasks(...plugins: IPlugin&lt;TContext, void&gt;[]): Context&lt;TContext&gt;'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Execute plugins functions the tasks for a context'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">or</span>(<span class="hljs-params"></span>) </span>{
+ <span class="hljs-keyword">this</span>.or = <span class="hljs-keyword">this</span>.a | <span class="hljs-keyword">this</span>.b;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">and</span>(<span class="hljs-params"></span>) </span>{
+ <span class="hljs-keyword">this</span>.and = <span class="hljs-keyword">this</span>.a &amp; <span class="hljs-keyword">this</span>.b;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">xor</span>(<span class="hljs-params"></span>) </span>{
+ <span class="hljs-keyword">this</span>.xor = <span class="hljs-keyword">this</span>.a ^ <span class="hljs-keyword">this</span>.b;
+}
+
+<span class="hljs-keyword">var</span> tasksDemo = <span class="hljs-keyword">new</span> Context({a: <span class="hljs-literal">true</span>, b: <span class="hljs-literal">false</span>});
+tasksDemo.tasks(or, and, xor);
+<span class="hljs-built_in">console</span>.log(tasksDemo.context())</code></pre>
+			<a href="#taskplugin-ipluginlttcontext-voidgt-use-any-contexttcontext" id="taskplugin-ipluginlttcontext-voidgt-use-any-contexttcontext" style="color: inherit; text-decoration: none;">
+				<h3>task(plugin: IPlugin&lt;TContext, void&gt;, ...use: any[]): Context<TContext></h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'task(plugin: IPlugin&lt;TContext, void&gt;, ...use: any[]): Context&lt;TContext&gt;'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Execute plugin with params'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">not</span>(<span class="hljs-params">comment</span>) </span>{
+ <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`<span class="hljs-subst">${comment}</span>: <span class="hljs-subst">${!<span class="hljs-keyword">this</span>.value}</span>`</span>);
+ <span class="hljs-keyword">this</span>.not = !<span class="hljs-keyword">this</span>.value;
+}
+
+<span class="hljs-keyword">var</span> taskDemo = <span class="hljs-keyword">new</span> Context({value: <span class="hljs-literal">false</span>});
+taskDemo.task(not, <span class="hljs-string">'not this equals'</span>);
+<span class="hljs-built_in">console</span>.log(taskDemo.context())</code></pre>
+			<a href="#maketresultplugin-ipluginlttcontext-tresultgt-use-any-tresult" id="maketresultplugin-ipluginlttcontext-tresultgt-use-any-tresult" style="color: inherit; text-decoration: none;">
+				<h3>make<TResult>(plugin: IPlugin&lt;TContext, TResult&gt;, ...use: any[]): TResult</h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'make&lt;TResult&gt;(plugin: IPlugin&lt;TContext, TResult&gt;, ...use: any[]): TResult'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Execute plugin function and return the result of plugin processing'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params"></span>) </span>{
+   <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.reduce(<span class="hljs-function">(<span class="hljs-params">previousValue, currentValue</span>) =&gt;</span> {
+     <span class="hljs-keyword">return</span> previousValue + currentValue;
+   }, <span class="hljs-number">0</span>);
+}
+
+<span class="hljs-keyword">var</span> numbers = <span class="hljs-keyword">new</span> Context([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]);
+<span class="hljs-keyword">var</span> takeSum = numbers.make(sum);
+<span class="hljs-built_in">console</span>.log(takeSum); <span class="hljs-comment">// 15</span></code></pre>
+			<a href="#maptmappedcontextplugin-ipluginlttcontext-tmappedcontextgt-use-any-contexttmappedcontext" id="maptmappedcontextplugin-ipluginlttcontext-tmappedcontextgt-use-any-contexttmappedcontext" style="color: inherit; text-decoration: none;">
+				<h3>map<TMappedContext>(plugin: IPlugin&lt;TContext, TMappedContext&gt;, ...use: any[]): Context<TMappedContext></h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'map&lt;TMappedContext&gt;(plugin: IPlugin&lt;TContext, TMappedContext&gt;, ...use: any[]): Context&lt;TMappedContext&gt;'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Executes plugin and make new context, based on the plugin result'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">increment</span>(<span class="hljs-params"></span>) </span>{
+ <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span> + <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-keyword">var</span> num = <span class="hljs-keyword">new</span> Context(<span class="hljs-number">10</span>);
+<span class="hljs-built_in">console</span>.log(num
+    .map(increment)
+    .map(increment)
+    .map(increment)
+    .map(increment)
+    .context());</code></pre>
+			<a href="#scopetresultplugin-iscopelttcontext-tresultgt-use-any-tresult" id="scopetresultplugin-iscopelttcontext-tresultgt-use-any-tresult" style="color: inherit; text-decoration: none;">
+				<h3>scope<TResult>(plugin: IScope&lt;TContext, TResult&gt;, ...use: any[]): TResult</h3>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'scope&lt;TResult&gt;(plugin: IScope&lt;TContext, TResult&gt;, ...use: any[]): TResult'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Execute IScope processing plugin'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'IScope = (this: Context&lt;TContext&gt;, context: TContext, use: any[]): TResult'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">switchContextUse</span>(<span class="hljs-params">context, use</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Context(use).use(context);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">eachFunc</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> index <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>) {
+        <span class="hljs-keyword">var</span> f = <span class="hljs-keyword">this</span>[index];
+        <span class="hljs-keyword">if</span> (f <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Function</span>) {
+            f.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+        }
+    }
+}
+
+<span class="hljs-keyword">var</span> c = <span class="hljs-keyword">new</span> Context([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>]);
+c
+.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{ <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'A: '</span>, <span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>) })
+.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{ <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'B: '</span>, <span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>) })
+.scope(switchContextUse)
+.task(eachFunc);
+
+<span class="hljs-built_in">console</span>.log(c);</code></pre>
+			<a href="#pluginizelttcontext-tresultgtplugin-ipluginlttcontext-tresultgt-ipluginlttcontext-tresultgt" id="pluginizelttcontext-tresultgtplugin-ipluginlttcontext-tresultgt-ipluginlttcontext-tresultgt" style="color: inherit; text-decoration: none;">
+				<h2>pluginize&lt;TContext, TResult&gt;(plugin: IPlugin&lt;TContext, TResult&gt;): IPlugin&lt;TContext, TResult&gt;</h2>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'pluginize&lt;TContext, TResult&gt;'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Converts a function to a context ecosystem plugin.'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addFunction</span>(<span class="hljs-params">n</span>) </span>{
+    <span class="hljs-keyword">var</span> arr = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-keyword">this</span>.length; i++) {
+        arr.push(<span class="hljs-keyword">this</span>[i] + n);
+    }
+    <span class="hljs-keyword">return</span> arr;
+}
+
+<span class="hljs-keyword">var</span> add = pluginize(addFunction);
+
+<span class="hljs-keyword">var</span> x = <span class="hljs-keyword">new</span> Context([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>]);
+
+<span class="hljs-comment">//You can use</span>
+<span class="hljs-built_in">console</span>.log(x.map(addFunction, <span class="hljs-number">10</span>).context());
+
+<span class="hljs-comment">//But better looks</span>
+<span class="hljs-built_in">console</span>.log(x.map(add(<span class="hljs-number">10</span>)).context());</code></pre>
+			<a href="#lshlttcontext-tresultgtfunc-context-tcontext-args-any-gt-tresult-ipluginlttcontext-tresultgt" id="lshlttcontext-tresultgtfunc-context-tcontext-args-any-gt-tresult-ipluginlttcontext-tresultgt" style="color: inherit; text-decoration: none;">
+				<h2>lsh&lt;TContext, TResult&gt;(func: (context: TContext, ...args: any[]) =&gt; TResult): IPlugin&lt;TContext, TResult&gt;</h2>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'lsh&lt;TContext, TResult&gt;(func: (context: TContext, ...args: any[]) =&gt; TResult): IPlugin&lt;TContext, TResult&gt;'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Moves a first argument to a function context. This is conversion from a function to context based function.'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sub</span>(<span class="hljs-params">a,b</span>) </span>{
+  <span class="hljs-keyword">return</span> a - b;
+}
+
+<span class="hljs-keyword">var</span> s = lsh(sub);
+<span class="hljs-built_in">console</span>.log(s.call(<span class="hljs-number">10</span>, <span class="hljs-number">5</span>));</code></pre>
+			<a href="#rshlttcontext-tresultgtplugin-ipluginlttcontext-tresultgt-context-tcontext-args-any-gt-tresult" id="rshlttcontext-tresultgtplugin-ipluginlttcontext-tresultgt-context-tcontext-args-any-gt-tresult" style="color: inherit; text-decoration: none;">
+				<h2>rsh&lt;TContext, TResult&gt;(plugin: IPlugin&lt;TContext, TResult&gt;): (context: TContext, ...args: any[]) =&gt; TResult</h2>
+			</a>
+			<pre><code class="language-ts"><span class="hljs-built_in">console</span>.info(<span class="hljs-string">'rsh&lt;TContext, TResult&gt;(plugin: IPlugin&lt;TContext, TResult&gt;): (context: TContext, ...args: any[]) =&gt; TResult'</span>);
+<span class="hljs-built_in">console</span>.info(<span class="hljs-string">'Moves a function context to a first argument. This is conversion from context based function to a function.'</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">stringify</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">''</span> + <span class="hljs-keyword">this</span>;
+}
+
+<span class="hljs-keyword">var</span> s = rsh(stringify());
+<span class="hljs-built_in">console</span>.log(s(<span class="hljs-number">12345</span>));</code></pre>
 			<a href="#rights-and-agreements" id="rights-and-agreements" style="color: inherit; text-decoration: none;">
 				<h1>Rights and Agreements</h1>
 			</a>
 			<p>License <a href="https://github.com/iyuo/context/blob/master/LICENSE">Apache-2.0</a></p>
-			<p>Copyright 2019 Oleksandr iyuo</p>
+			<p>Copyright 2019 Oleksandr Lopatnov</p>
 		</div>
 		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">
@@ -2481,7 +2728,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/iyuo/context/blob/64600c9/src/context.ts#L68">context.ts:68</a></li>
+								<li>Defined in <a href="https://github.com/iyuo/context/blob/ee32efb/src/context.ts#L68">context.ts:68</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2543,7 +2790,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/iyuo/context/blob/64600c9/src/context.ts#L100">context.ts:100</a></li>
+								<li>Defined in <a href="https://github.com/iyuo/context/blob/ee32efb/src/context.ts#L100">context.ts:100</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2588,7 +2835,7 @@ console.log(obj);</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/iyuo/context/blob/64600c9/src/context.ts#L81">context.ts:81</a></li>
+								<li>Defined in <a href="https://github.com/iyuo/context/blob/ee32efb/src/context.ts#L81">context.ts:81</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
