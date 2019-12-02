@@ -321,7 +321,7 @@ function stringify() {
   return '' + this;
 }
 
-var s = rsh(stringify());
+var s = rsh(stringify);
 console.log(s(12345));
 ```
 
