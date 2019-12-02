@@ -25,7 +25,9 @@
   "scripts": {
     "build": "rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
     "watch": "rollup -c rollup.config.ts -w",
-    "test": "jest"
+    "test": "jest",
+    "publish-npm": "node ./publish-gpr.js -s https://registry.npmjs.org",
+    "publish-gpr": "node ./publish-gpr.js -s https://npm.pkg.github.com"
   },
   "files": [
     "dist"
