@@ -192,8 +192,7 @@ space.useArray([strategy1, strategy2, strategy3]).make(strategy(100,100)) // "Th
 ### tasks(...plugins: IPlugin<TContext, void>[]): Context<TContext>
 
 ```ts
-console.info('tasks(...plugins: IPlugin<TContext, void>[]): Context<TContext>');
-console.info('Execute plugins functions the tasks for a context');
+// Execute plugins functions the tasks for a context
 
 function or() {
  this.or = this.a | this.b;
@@ -209,14 +208,31 @@ function xor() {
 
 var tasksDemo = new Context({a: true, b: false});
 tasksDemo.tasks(or, and, xor);
-console.log(tasksDemo.context())
+
+console.log(tasksDemo.context());
+/*
+   Object
+   a: true
+   b: false
+   and: 0
+   or: 1
+   xor: 1
+*/
+
+console.log(new Context({a: true, b: true}).tasks(and, xor).context());
+/*
+   Object
+   a: true
+   b: true
+   and: 1
+   xor: 0
+*/
 ```
 
 ### task(plugin: IPlugin<TContext, void>, ...use: any[]): Context<TContext>
 
 ```ts
-console.info('task(plugin: IPlugin<TContext, void>, ...use: any[]): Context<TContext>');
-console.info('Execute plugin with params');
+// Execute plugin with params
 
 function not(comment) {
  console.log(`${comment}: ${!this.value}`);
@@ -224,8 +240,18 @@ function not(comment) {
 }
 
 var taskDemo = new Context({value: false});
-taskDemo.task(not, 'not this equals');
-console.log(taskDemo.context())
+taskDemo.task(not, 'not this equals'); // "not this equals: true"
+
+console.log(taskDemo.context()); // Object {not: true, value: false}
+
+taskDemo.task(not, 'Repeat not 1'); // "Repeat not 1: true"
+taskDemo.task(not, 'Repeat not 2'); // "Repeat not 2: true"
+
+taskDemo.task(not, 'Same not task 1').task(not, 'Same not task 2');
+/*
+"Same not task 1: true"
+"Same not task 2: true"
+*/
 ```
 
 ### make<TResult>(plugin: IPlugin<TContext, TResult>, ...use: any[]): TResult
