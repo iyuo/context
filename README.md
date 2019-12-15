@@ -52,7 +52,8 @@ Test it with a runkit: [https://npm.runkit.com/@iyuo/context](https://npm.runkit
 
 # Plugins
 
-- [namespace](https://iyuo.github.io/namespace/)
+- [namespace](https://iyuo.github.io/namespace/) Dynamic namespace creation
+- [join](https://iyuo.github.io/join) Object join technics
 
 ## Example
 
