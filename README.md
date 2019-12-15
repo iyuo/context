@@ -74,28 +74,34 @@ console.log(takeSum); // 15
 ## class Context<TContext>
 
 ```ts
-console.info('A sample of a Context<TContext> class, the object Context<string>')
-console.log(new Context("A sample context"));
+//A sample of a Context<TContext> class, this is the object Context<string>
+
+let myContextSample = new Context("A sample context");
+console.log(myContextSample);
+
+/*
+Context
+  _context: "A sample context"
+  _use: []
+*/
 ```
 
 ### context(): TContext
 
 ```ts
-console.info('context(): TContext');
-console.info('Gets the context from a wrapper');
+// Gets the context from a wrapper
 
 var sys = new Context({ hello: 'world' });
-console.log(sys.context());
+console.log(sys.context()); // Object {hello: "world"}
 
 var arr = new Context([1, 2, 3]);
-console.log(arr.context());
+console.log(arr.context()); // [1, 2, 3]
 ```
 
 ### change(context: TContext): Context<TContext>
 
 ```ts
-console.info('change(context: TContext): Context<TContext>');
-console.info('Change current context to a new one');
+// Change current context to a new one
 
 var arr = new Context([1, 2, 3]);
 var changed = arr.change([4,5,6]);
@@ -109,8 +115,7 @@ console.log(sys.change({hello: 'friends'}).context()); //{hello: "friends"}
 ### use(...args: any[]): Context<TContext>
 
 ```ts
-console.info('use(...args: any[]): Context<TContext>');
-console.info('Add arguments of plugins execution');
+// Adds arguments of plugins execution
 
 function dialog(useQ, useA) {
    this.q(`${useQ} Hi, how are you doing?`);
@@ -125,13 +130,26 @@ var space = new Context({
 });
 
 space.use('Tom', 'Lisa').make(dialog);
+/*
+"Q: Tom Hi, how are you doing?"
+"A: Lisa Fine."
+"Q: Lisa How's it going?"
+"A: Tom Good"
+*/
+
+space.use('Ann').use('Nina').make(dialog);
+/*
+"Q: Ann Hi, how are you doing?"
+"A: Nina Fine."
+"Q: Nina How's it going?"
+"A: Ann Good"
+*/
 ```
 
 ### useArray(use: any[]): Context<TContext>
 
 ```ts
-console.info('useArray(use: any[]): Context<TContext>');
-console.info('Uses "use" parameter for arguments of plugins execution instead of current Context class property _use.');
+// Uses "use" parameter for arguments of plugins execution instead of current Context class property _use.
 
 function strategy(teamA, teamB) {
     return function(behavior1, behavior2, behaviorDefault) {
@@ -166,7 +184,9 @@ var space = new Context(function compare(a,b){
   return diff === 0 ? 0 : (diff > 0 ? 1 : -1);
 });
 
-space.useArray([strategy1, strategy2, strategy3]).make(strategy(3,4))
+space.useArray([strategy1, strategy2, strategy3]).make(strategy(3,4)); // "This is strategy2"
+space.useArray([strategy1, strategy2, strategy3]).make(strategy(100,50)) // "This is strategy1"
+space.useArray([strategy1, strategy2, strategy3]).make(strategy(100,100)) // "This is strategy3"
 ```
 
 ### tasks(...plugins: IPlugin<TContext, void>[]): Context<TContext>
