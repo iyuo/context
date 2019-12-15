@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: 12
       - run: npm ci
+      - run: npm run build
       - run: npm test
 
   publish-npm:
@@ -24,8 +25,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm install
+          registry-url: 'https://registry.npmjs.org'      
       - run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
@@ -39,8 +39,7 @@ jobs:
         with:
           node-version: '12.x'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@lopatnov'
-      - run: npm ci
+          scope: '@lopatnov'      
       - run: npm run publish-gpr
       - run: npm publish --access=public
         env:
