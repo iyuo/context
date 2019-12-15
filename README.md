@@ -2,7 +2,7 @@
 
 [![NPM version](https://badge.fury.io/js/%40iyuo%2Fcontext.svg)](https://www.npmjs.com/package/@iyuo/context)
 [![License](https://img.shields.io/github/license/iyuo/context)](https://github.com/iyuo/context/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/url?url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2F%40iyuo/context)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fcontext)
+[![Twitter](https://img.shields.io/twitter/url?url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2F%40iyuo/context)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2F%40iyuo/context)
 
 The TypeScript ecosystem for an object. It allows to add processing plugins to it.
 
