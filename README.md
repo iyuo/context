@@ -257,8 +257,7 @@ taskDemo.task(not, 'Same not task 1').task(not, 'Same not task 2');
 ### make<TResult>(plugin: IPlugin<TContext, TResult>, ...use: any[]): TResult
 
 ```ts
-console.info('make<TResult>(plugin: IPlugin<TContext, TResult>, ...use: any[]): TResult');
-console.info('Execute plugin function and return the result of plugin processing');
+// Execute plugin function and return the result of plugin processing
 
 function sum() {
    return this.reduce((previousValue, currentValue) => {
@@ -266,18 +265,34 @@ function sum() {
    }, 0);
 }
 
+function avg() {
+   return this.reduce((previousValue, currentValue) => {
+     return previousValue + currentValue;
+   }, 0) / this.length;
+}
+
 var numbers = new Context([1, 2, 3, 4, 5]);
 var takeSum = numbers.make(sum);
+var takeAvg = numbers.make(avg);
+
 console.log(takeSum); // 15
+console.log(takeAvg); // 3
 ```
 ### map<TMappedContext>(plugin: IPlugin<TContext, TMappedContext>, ...use: any[]): Context<TMappedContext>
 
 ```ts
-console.info('map<TMappedContext>(plugin: IPlugin<TContext, TMappedContext>, ...use: any[]): Context<TMappedContext>');
-console.info('Executes plugin and make new context, based on the plugin result');
+// Executes plugin and make new context, based on the plugin result
 
 function increment() {
  return this + 1;
+}
+
+function makeArray() {
+ let arr = [];
+ for (var i = 0; i < this; i++) {
+    arr.push(i + 1);
+ }
+ return arr;
 }
 
 var num = new Context(10);
@@ -286,7 +301,11 @@ console.log(num
     .map(increment)
     .map(increment)
     .map(increment)
-    .context());
+    .context()); // 14
+    
+var arrContext = num.map(increment).map(makeArray).context();
+console.log(arrContext); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
 ```
 
 ### scope<TResult>(plugin: IScope<TContext, TResult>, ...use: any[]): TResult
