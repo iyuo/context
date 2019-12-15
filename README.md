@@ -296,24 +296,29 @@ function makeArray() {
 }
 
 var num = new Context(10);
-console.log(num
+
+var incremented = num
     .map(increment)
     .map(increment)
     .map(increment)
     .map(increment)
-    .context()); // 14
+    .context();
+console.log(incremented); // 14
     
 var arrContext = num.map(increment).map(makeArray).context();
 console.log(arrContext); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+var makedArr = num.map(increment).map(increment).make(makeArray);
+console.log(makedArr); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 ```
 
 ### scope<TResult>(plugin: IScope<TContext, TResult>, ...use: any[]): TResult
 
 ```ts
-console.info('scope<TResult>(plugin: IScope<TContext, TResult>, ...use: any[]): TResult');
-console.info('Execute IScope processing plugin');
-console.info('IScope = (this: Context<TContext>, context: TContext, use: any[]): TResult');
+// Execute IScope processing plugin
+// where 
+// IScope = (this: Context<TContext>, context: TContext, use: any[]): TResult');
 
 function switchContextUse(context, use) {
     return new Context(use).use(context);
@@ -329,20 +334,31 @@ function eachFunc() {
 }
 
 var c = new Context([1,2,3,4,5]);
-c
-.use(function(){ console.log('A: ', this, arguments) })
-.use(function(){ console.log('B: ', this, arguments) })
-.scope(switchContextUse)
-.task(eachFunc);
+var resultOfSwitch = c
+   .use(function(){ console.log('A: ', this, arguments) })
+   .use(function(){ console.log('B: ', this, arguments) })
+   .scope(switchContextUse)
+   .task(eachFunc);
+/*
+"A: " [function(), function()] Arguments {0: [1, 2, 3, 4, 5]}
+"B: " [function(), function()] Arguments {0: [1, 2, 3, 4, 5]}
+*/
+
+console.log(resultOfSwitch);
+/*
+Context {_context: [function(), function()], _use: [[1, 2, 3, 4, 5]]}
+*/
 
 console.log(c);
+/*
+Context {_context: [1, 2, 3, 4, 5], _use: [function(), function()]}
+*/
 ```
 
 ## pluginize<TContext, TResult>(plugin: IPlugin<TContext, TResult>): IPlugin<TContext, TResult>
 
 ```ts
-console.info('pluginize<TContext, TResult>');
-console.info('Converts a function to a context ecosystem plugin.');
+// Converts a function to a context ecosystem plugin.
 
 function addFunction(n) {
     var arr = [];
@@ -361,34 +377,39 @@ console.log(x.map(addFunction, 10).context());
 
 //But better looks
 console.log(x.map(add(10)).context());
+
+/*
+[11, 12, 13, 14, 15]
+*/
 ```
 
 ## lsh<TContext, TResult>(func: (context: TContext, ...args: any[]) => TResult): IPlugin<TContext, TResult>
 
 ```ts
-console.info('lsh<TContext, TResult>(func: (context: TContext, ...args: any[]) => TResult): IPlugin<TContext, TResult>');
-console.info('Moves a first argument to a function context. This is conversion from a function to context based function.');
+// Moves a first argument to a function context. This is conversion from a function to context based function.
 
 function sub(a,b) {
   return a - b;
 }
 
 var s = lsh(sub);
-console.log(s.call(10, 5));
+console.log(s.call(10, 5)); // 5
+
+var ss = s.bind(100);
+console.log(ss(33)); // 67
 ```
 
 ## rsh<TContext, TResult>(plugin: IPlugin<TContext, TResult>): (context: TContext, ...args: any[]) => TResult
 
 ```ts
-console.info('rsh<TContext, TResult>(plugin: IPlugin<TContext, TResult>): (context: TContext, ...args: any[]) => TResult');
-console.info('Moves a function context to a first argument. This is conversion from context based function to a function.');
+// Moves a function context to a first argument. This is conversion from context based function to a function.
 
 function stringify() {
   return '' + this;
 }
 
 var s = rsh(stringify);
-console.log(s(12345));
+console.log(s(12345)); // "12345"
 ```
 
 # Rights and Agreements
