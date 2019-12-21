@@ -71,7 +71,7 @@ console.log(takeSum); // 15
 
 # Use cases
 
-## class Context<TContext>
+## `class Context<TContext>`
 
 ```ts
 //A sample of a Context<TContext> class, this is the object Context<string>
