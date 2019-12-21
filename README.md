@@ -187,6 +187,13 @@ var space = new Context(function compare(a,b){
 space.useArray([strategy1, strategy2, strategy3]).make(strategy(3,4)); // "This is strategy2"
 space.useArray([strategy1, strategy2, strategy3]).make(strategy(100,50)) // "This is strategy1"
 space.useArray([strategy1, strategy2, strategy3]).make(strategy(100,100)) // "This is strategy3"
+
+//The same with .use()
+space.use(strategy1, strategy2, strategy3).make(strategy(3,4)); // "This is strategy2"
+space.use(strategy1).use(strategy2, strategy3).make(strategy(100,50)) // "This is strategy1"
+space.use(strategy1).use(strategy2).use(strategy3).make(strategy(100,100)) // "This is strategy3"
+
+//Note that useArray replaces use functions before
 ```
 
 ### tasks(...plugins: IPlugin<TContext, void>[]): Context<TContext>
