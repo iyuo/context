@@ -71,31 +71,37 @@ console.log(takeSum); // 15
 
 # Use cases
 
-## class Context<TContext>
+## `class Context<TContext>`
 
 ```ts
-console.info('A sample of a Context<TContext> class, the object Context<string>')
-console.log(new Context("A sample context"));
+//A sample of a Context<TContext> class, this is the object Context<string>
+
+let myContextSample = new Context("A sample context");
+console.log(myContextSample);
+
+/*
+Context
+  _context: "A sample context"
+  _use: []
+*/
 ```
 
 ### context(): TContext
 
 ```ts
-console.info('context(): TContext');
-console.info('Gets the context from a wrapper');
+// Gets the context from a wrapper
 
 var sys = new Context({ hello: 'world' });
-console.log(sys.context());
+console.log(sys.context()); // Object {hello: "world"}
 
 var arr = new Context([1, 2, 3]);
-console.log(arr.context());
+console.log(arr.context()); // [1, 2, 3]
 ```
 
 ### change(context: TContext): Context<TContext>
 
 ```ts
-console.info('change(context: TContext): Context<TContext>');
-console.info('Change current context to a new one');
+// Change current context to a new one
 
 var arr = new Context([1, 2, 3]);
 var changed = arr.change([4,5,6]);
@@ -109,8 +115,7 @@ console.log(sys.change({hello: 'friends'}).context()); //{hello: "friends"}
 ### use(...args: any[]): Context<TContext>
 
 ```ts
-console.info('use(...args: any[]): Context<TContext>');
-console.info('Add arguments of plugins execution');
+// Adds arguments of plugins execution
 
 function dialog(useQ, useA) {
    this.q(`${useQ} Hi, how are you doing?`);
@@ -125,13 +130,26 @@ var space = new Context({
 });
 
 space.use('Tom', 'Lisa').make(dialog);
+/*
+"Q: Tom Hi, how are you doing?"
+"A: Lisa Fine."
+"Q: Lisa How's it going?"
+"A: Tom Good"
+*/
+
+space.use('Ann').use('Nina').make(dialog);
+/*
+"Q: Ann Hi, how are you doing?"
+"A: Nina Fine."
+"Q: Nina How's it going?"
+"A: Ann Good"
+*/
 ```
 
 ### useArray(use: any[]): Context<TContext>
 
 ```ts
-console.info('useArray(use: any[]): Context<TContext>');
-console.info('Uses "use" parameter for arguments of plugins execution instead of current Context class property _use.');
+// Uses "use" parameter for arguments of plugins execution instead of current Context class property _use.
 
 function strategy(teamA, teamB) {
     return function(behavior1, behavior2, behaviorDefault) {
@@ -166,14 +184,22 @@ var space = new Context(function compare(a,b){
   return diff === 0 ? 0 : (diff > 0 ? 1 : -1);
 });
 
-space.useArray([strategy1, strategy2, strategy3]).make(strategy(3,4))
+space.useArray([strategy1, strategy2, strategy3]).make(strategy(3,4)); // "This is strategy2"
+space.useArray([strategy1, strategy2, strategy3]).make(strategy(100,50)) // "This is strategy1"
+space.useArray([strategy1, strategy2, strategy3]).make(strategy(100,100)) // "This is strategy3"
+
+//The same with .use()
+space.use(strategy1, strategy2, strategy3).make(strategy(3,4)); // "This is strategy2"
+space.use(strategy1).use(strategy2, strategy3).make(strategy(100,50)) // "This is strategy1"
+space.use(strategy1).use(strategy2).use(strategy3).make(strategy(100,100)) // "This is strategy3"
+
+//Note that useArray replaces use functions before
 ```
 
 ### tasks(...plugins: IPlugin<TContext, void>[]): Context<TContext>
 
 ```ts
-console.info('tasks(...plugins: IPlugin<TContext, void>[]): Context<TContext>');
-console.info('Execute plugins functions the tasks for a context');
+// Execute plugins functions the tasks for a context
 
 function or() {
  this.or = this.a | this.b;
@@ -189,14 +215,31 @@ function xor() {
 
 var tasksDemo = new Context({a: true, b: false});
 tasksDemo.tasks(or, and, xor);
-console.log(tasksDemo.context())
+
+console.log(tasksDemo.context());
+/*
+   Object
+   a: true
+   b: false
+   and: 0
+   or: 1
+   xor: 1
+*/
+
+console.log(new Context({a: true, b: true}).tasks(and, xor).context());
+/*
+   Object
+   a: true
+   b: true
+   and: 1
+   xor: 0
+*/
 ```
 
 ### task(plugin: IPlugin<TContext, void>, ...use: any[]): Context<TContext>
 
 ```ts
-console.info('task(plugin: IPlugin<TContext, void>, ...use: any[]): Context<TContext>');
-console.info('Execute plugin with params');
+// Execute plugin with params
 
 function not(comment) {
  console.log(`${comment}: ${!this.value}`);
@@ -204,15 +247,24 @@ function not(comment) {
 }
 
 var taskDemo = new Context({value: false});
-taskDemo.task(not, 'not this equals');
-console.log(taskDemo.context())
+taskDemo.task(not, 'not this equals'); // "not this equals: true"
+
+console.log(taskDemo.context()); // Object {not: true, value: false}
+
+taskDemo.task(not, 'Repeat not 1'); // "Repeat not 1: true"
+taskDemo.task(not, 'Repeat not 2'); // "Repeat not 2: true"
+
+taskDemo.task(not, 'Same not task 1').task(not, 'Same not task 2');
+/*
+"Same not task 1: true"
+"Same not task 2: true"
+*/
 ```
 
 ### make<TResult>(plugin: IPlugin<TContext, TResult>, ...use: any[]): TResult
 
 ```ts
-console.info('make<TResult>(plugin: IPlugin<TContext, TResult>, ...use: any[]): TResult');
-console.info('Execute plugin function and return the result of plugin processing');
+// Execute plugin function and return the result of plugin processing
 
 function sum() {
    return this.reduce((previousValue, currentValue) => {
@@ -220,35 +272,60 @@ function sum() {
    }, 0);
 }
 
+function avg() {
+   return this.reduce((previousValue, currentValue) => {
+     return previousValue + currentValue;
+   }, 0) / this.length;
+}
+
 var numbers = new Context([1, 2, 3, 4, 5]);
 var takeSum = numbers.make(sum);
+var takeAvg = numbers.make(avg);
+
 console.log(takeSum); // 15
+console.log(takeAvg); // 3
 ```
 ### map<TMappedContext>(plugin: IPlugin<TContext, TMappedContext>, ...use: any[]): Context<TMappedContext>
 
 ```ts
-console.info('map<TMappedContext>(plugin: IPlugin<TContext, TMappedContext>, ...use: any[]): Context<TMappedContext>');
-console.info('Executes plugin and make new context, based on the plugin result');
+// Executes plugin and make new context, based on the plugin result
 
 function increment() {
  return this + 1;
 }
 
+function makeArray() {
+ let arr = [];
+ for (var i = 0; i < this; i++) {
+    arr.push(i + 1);
+ }
+ return arr;
+}
+
 var num = new Context(10);
-console.log(num
+
+var incremented = num
     .map(increment)
     .map(increment)
     .map(increment)
     .map(increment)
-    .context());
+    .context();
+console.log(incremented); // 14
+    
+var arrContext = num.map(increment).map(makeArray).context();
+console.log(arrContext); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+var makedArr = num.map(increment).map(increment).make(makeArray);
+console.log(makedArr); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+
 ```
 
 ### scope<TResult>(plugin: IScope<TContext, TResult>, ...use: any[]): TResult
 
 ```ts
-console.info('scope<TResult>(plugin: IScope<TContext, TResult>, ...use: any[]): TResult');
-console.info('Execute IScope processing plugin');
-console.info('IScope = (this: Context<TContext>, context: TContext, use: any[]): TResult');
+// Execute IScope processing plugin
+// where 
+// IScope = (this: Context<TContext>, context: TContext, use: any[]): TResult');
 
 function switchContextUse(context, use) {
     return new Context(use).use(context);
@@ -264,20 +341,31 @@ function eachFunc() {
 }
 
 var c = new Context([1,2,3,4,5]);
-c
-.use(function(){ console.log('A: ', this, arguments) })
-.use(function(){ console.log('B: ', this, arguments) })
-.scope(switchContextUse)
-.task(eachFunc);
+var resultOfSwitch = c
+   .use(function(){ console.log('A: ', this, arguments) })
+   .use(function(){ console.log('B: ', this, arguments) })
+   .scope(switchContextUse)
+   .task(eachFunc);
+/*
+"A: " [function(), function()] Arguments {0: [1, 2, 3, 4, 5]}
+"B: " [function(), function()] Arguments {0: [1, 2, 3, 4, 5]}
+*/
+
+console.log(resultOfSwitch);
+/*
+Context {_context: [function(), function()], _use: [[1, 2, 3, 4, 5]]}
+*/
 
 console.log(c);
+/*
+Context {_context: [1, 2, 3, 4, 5], _use: [function(), function()]}
+*/
 ```
 
 ## pluginize<TContext, TResult>(plugin: IPlugin<TContext, TResult>): IPlugin<TContext, TResult>
 
 ```ts
-console.info('pluginize<TContext, TResult>');
-console.info('Converts a function to a context ecosystem plugin.');
+// Converts a function to a context ecosystem plugin.
 
 function addFunction(n) {
     var arr = [];
@@ -296,34 +384,39 @@ console.log(x.map(addFunction, 10).context());
 
 //But better looks
 console.log(x.map(add(10)).context());
+
+/*
+[11, 12, 13, 14, 15]
+*/
 ```
 
 ## lsh<TContext, TResult>(func: (context: TContext, ...args: any[]) => TResult): IPlugin<TContext, TResult>
 
 ```ts
-console.info('lsh<TContext, TResult>(func: (context: TContext, ...args: any[]) => TResult): IPlugin<TContext, TResult>');
-console.info('Moves a first argument to a function context. This is conversion from a function to context based function.');
+// Moves a first argument to a function context. This is conversion from a function to context based function.
 
 function sub(a,b) {
   return a - b;
 }
 
 var s = lsh(sub);
-console.log(s.call(10, 5));
+console.log(s.call(10, 5)); // 5
+
+var ss = s.bind(100);
+console.log(ss(33)); // 67
 ```
 
 ## rsh<TContext, TResult>(plugin: IPlugin<TContext, TResult>): (context: TContext, ...args: any[]) => TResult
 
 ```ts
-console.info('rsh<TContext, TResult>(plugin: IPlugin<TContext, TResult>): (context: TContext, ...args: any[]) => TResult');
-console.info('Moves a function context to a first argument. This is conversion from context based function to a function.');
+// Moves a function context to a first argument. This is conversion from context based function to a function.
 
 function stringify() {
   return '' + this;
 }
 
 var s = rsh(stringify);
-console.log(s(12345));
+console.log(s(12345)); // "12345"
 ```
 
 # Rights and Agreements
